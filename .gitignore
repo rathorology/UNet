@@ -1,0 +1,4 @@
+cityscape_images
+.idea/
+__pycache__/
+logs/
