@@ -11,8 +11,7 @@ from main_model import model, train
 x = list()
 y = list()
 
-# @markdown > The number of images to load from the dataset. By default 400 images are loaded.
-num_images = 400  # @param {type: "number" }
+num_images = 400
 
 image_dir = 'cityscape_images/images'
 image_filenames = os.listdir(image_dir)
@@ -62,3 +61,27 @@ for e in range(num_epochs):
         image, label = features
         summ_loss = train(model, image, label)
         tf.summary.scalar('loss', data=summ_loss, step=e)
+
+import matplotlib.pyplot as plt
+
+input_image = test_features[0:1]
+pred = model(input_image).numpy()
+image = np.zeros((128, 128, 3))
+for x in range(128):
+    for y in range(128):
+        if pred[0, x, y] > 0.5:
+            image[x, y] = [255, 255, 255]
+        else:
+            image[x, y] = [0, 0, 0]
+
+
+def show_images(images: list):
+    n = len(images)
+    f = plt.figure()
+    for i in range(n):
+        f.add_subplot(1, n, i + 1)
+        plt.imshow(images[i], interpolation='none')
+    plt.show()
+
+
+show_images([test_features[0], image])
